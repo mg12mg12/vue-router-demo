@@ -7,6 +7,7 @@ import Products from './pages/Products.vue'; // 引入 Other 頁面
 
 const routes = [
   { path: '/', component: HomePage },
+  { path: '/vue-router-demo', component: HomePage },
   { path: '/content', component: ContentPage },
   { path: '/other', name: 'Other', component: Other },
   { path: '/products', name: 'Products', component: Products }, // 新增的路由
