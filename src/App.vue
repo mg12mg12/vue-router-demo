@@ -59,7 +59,9 @@ const closeDropdown = () => {
         <router-link to="/other">其他</router-link>
         <router-link to="/products">商品</router-link>
       </div>
-
+      <div>
+        <h2>這是一個測試網頁</h2>
+      </div>
     </nav>
 
     <!-- Main Content -->
