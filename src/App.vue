@@ -1,80 +1,257 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { ref,onMounted } from 'vue';
+const isDropdownVisible = ref(false);
+
+// 切換下拉選單顯示狀態
+const toggleDropdown = () => {
+  isDropdownVisible.value = !isDropdownVisible.value;
+  console.log('Dropdown visible:', isDropdownVisible.value);
+};
+
+// 關閉下拉選單
+const closeDropdown = () => {
+  isDropdownVisible.value = false;
+};
+
 </script>
 
 <template>
-  <div>
-    <h1>🌟 我的 Vue Router demo2更新0421 小網站</h1>
-    <nav>
-      <router-link to="/">首頁(demo1修改)</router-link> |
-      <router-link to="/about">關於</router-link>
+  <div class="test_web-container">
+    <!-- Banner -->
+    <header class="banner">
+      <h1>My Simple Website</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar_banner">
+      <!-- 左側摺疊選單 -->
+      <div class="dropdown left-dropdown">
+        <button class="dropdown-button"  @click="toggleDropdown">
+          <!-- 三條線圖示 -->
+          <span class="menu-icon"></span>
+          <span class="menu-icon"></span>
+          <span class="menu-icon"></span>
+        </button>
+
+        <!-- 遮罩 -->
+        <div
+          v-if="isDropdownVisible"
+          class="dropdown-overlay"
+          @click="closeDropdown"
+        ></div>
+
+        <!-- 下拉選單 -->
+        <div
+          class="dropdown-menu_test"
+          :class="{ 'dropdown-menu_test-visible': isDropdownVisible }"
+        >
+          <button class="close-button" @click="closeDropdown">×</button>
+          <router-link to="/content">內容</router-link>
+          <router-link to="/other">其他</router-link>
+          <router-link to="/products">商品</router-link>
+        </div>
+      </div>
+
+
+      <div class="d-flex">
+        <router-link to="/">首頁</router-link>
+        <router-link to="/content">內容</router-link>
+        <router-link to="/other">其他</router-link>
+        <router-link to="/products">商品</router-link>
+      </div>
+
     </nav>
-    <hr />
-    <router-view />
+
+    <!-- Main Content -->
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
+<style>
+/* 全域樣式 */
+html, body {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  font-size: 12px;
+  height: 100%;
+  overflow-x: hidden; /* 隱藏水平滾動條 */
+}
+
+body{
+  display: contents;
+}
+
+* {
+  box-sizing: border-box; /* 確保 padding 和 border 不影響元素大小 */
+}
+
+/* App Container Styles */
+/* .test_web-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #001f3f;
+  color: white;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+} */
+.test_web-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* 改為 stretch */
+  min-height: 100vh;
+  background-color: #001f3f;
+  color: white;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+}
+
+.banner {
+  background-color: #42b983;
+  color: white;
+  padding: 20px;
   text-align: center;
-  margin-top: 2rem;
+  width: 100%; /* 改為 100% */
+  box-sizing: border-box; /* 確保 padding 不影響寬度 */
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+/* Navigation Bar Styles */
+.navbar_banner {
+  display: flex;
+  justify-content: center;
+  background-color: #f4f4f4;
+  padding: 10px;
+  width: 100%;
 }
 
-nav a.router-link-exact-active:hover {
+.navbar_banner a {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none; /* 去掉下劃線 */
+}
+
+.navbar_banner a:hover {
+  background-color: #369b73;
+}
+
+/* Main Content Styles */
+main {
+  padding: 20px;
+  text-align: center;
+}
+
+.detial-item .el-form-item__label {
+  color: #42b983;
+  font-size: 18px; /* 調整字體大小 */
+  display: block;
+  width: auto !important;
+}
+
+.el-form-item__content{
+  margin-left: 0 !important;
+  display: block;
+  justify-content: center;
+}
+
+.checkbox-item {
+  margin-top: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.checkbox-item a {
+  color: #fff;
+  font-size: 12px;
+}
+
+/* 左側摺疊選單樣式 */
+.left-dropdown {
+  position: relative;
+}
+
+.dropdown-button {
   background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.menu-icon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #42b983;
+  margin: 5px 0;
 }
 
-nav a:first-of-type {
-  border: 0;
+/* 下拉選單初始樣式 */
+.dropdown-menu_test {
+  position: fixed;
+  top: 0;
+  left: -200px; /* 隱藏在左側 */
+  width: 200px;
+  height: 100%;
+  background-color: #f4f4f4;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: left 0.3s ease; /* 滑動動畫 */
+  z-index: 1001;
+  padding: 10px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.dropdown-menu_test-visible {
+  left: 0; /* 滾出到左側 */
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.dropdown-menu_test a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.dropdown-menu_test a:hover {
+  background-color: #ddd;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+/* 關閉按鈕樣式 */
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: end;
+  /* position: absolute;
+  top: 10px;
+  right: 10px; */
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+/* 遮罩樣式 */
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* 75% 黑色透明 */
+  z-index: 1000;
 }
 </style>
